@@ -1,4 +1,4 @@
-# API REST de Clientes com SPRING BOOT
+# API REST de Clientes com Spring Boot
 
 Exemplo de uma API REST desenvolvida com Spring Boot
 
