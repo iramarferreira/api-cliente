@@ -16,7 +16,7 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
-      - name: Validar o Gradle wrapper
+      - name: Validar o gradle wrapper
         uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
       - name: Configurando o banco de dados
         uses: harmon758/postgresql-action@v1
@@ -27,7 +27,7 @@ jobs:
           postgresql password: 'root'
       - name: Permissão para executar o gradlew
         run: chmod +x ./gradlew
-      - name: Build with Gradlew
+      - name: Build com gradlew
         run: ./gradlew build
       - name: Deploy no Heroku
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
