@@ -24,14 +24,14 @@ import java.util.List;
 @ResponseBody // Retorno json
 @CrossOrigin(originPatterns = "http://localhost:3000/", allowCredentials = "true") // Permitir requisições de qualquer origem
 @RequestMapping(path = "/api")
-@Tag(name = "Cliente", description = "Documentação da API REST de Clientes")
+@Tag(name = "Clientes", description = "Documentação da API REST de Clientes")
 public class ClienteController {
 
     @Autowired
     ClienteService clienteService;
 
 
-    @Operation(description = "Rota para buscar todos os clientes", security = @SecurityRequirement(name = "Basic Auth"))
+    @Operation(summary = "Rota para buscar todos os clientes", security = @SecurityRequirement(name = "Basic Auth"))
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class)))
     @ApiResponse(responseCode = "401", description = "Não autorizado",
@@ -42,7 +42,7 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.findAll());
     }
 
-    @Operation(description = "Rota para buscar todos os clientes por paginação",
+    @Operation(summary = "Rota para buscar todos os clientes por paginação",
             security = @SecurityRequirement(name = "Basic Auth"))
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class)))
@@ -54,7 +54,7 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.findAllPaginacao(pageable));
     }
 
-    @Operation(description = "Rota para buscar clientes pelo nome",
+    @Operation(summary = "Rota para buscar clientes pelo nome",
             security = @SecurityRequirement(name = "Basic Auth"))
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class)))
@@ -66,7 +66,7 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.findByName(nome));
     }
 
-    @Operation(description = "Rota para buscar todos os clientes pelo nome",
+    @Operation(summary = "Rota para buscar todos os clientes pelo nome",
             security = @SecurityRequirement(name = "Basic Auth"))
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class)))
@@ -79,7 +79,7 @@ public class ClienteController {
     }
 
 
-    @Operation(description = "Rota para buscar a quantidade de clientes",
+    @Operation(summary = "Rota para buscar a quantidade de clientes",
             security = @SecurityRequirement(name = "Basic Auth"))
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(example = "0")))
@@ -91,7 +91,7 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.totalCliente());
     }
 
-    @Operation(description = "Rota para encontrar um cliente pelo ID",
+    @Operation(summary = "Rota para encontrar um cliente pelo ID",
             security = @SecurityRequirement(name = "Basic Auth"))
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class)))
@@ -109,7 +109,7 @@ public class ClienteController {
         }
     }
 
-    @Operation(description = "Rota para cadastrar um cliente",
+    @Operation(summary = "Rota para cadastrar um cliente",
             security = @SecurityRequirement(name = "Basic Auth"))
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class)))
@@ -121,7 +121,7 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.save(cliente));
     }
 
-    @Operation(description = "Rota para atualizar um cliente",
+    @Operation(summary = "Rota para atualizar um cliente",
             security = @SecurityRequirement(name = "Basic Auth"))
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class)))
@@ -142,7 +142,7 @@ public class ClienteController {
         }
     }
 
-    @Operation(description = "Rota para deletar um cliente",
+    @Operation(summary = "Rota para deletar um cliente",
             security = @SecurityRequirement(name = "Basic Auth"))
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(example = "Cliente deletado.")))
