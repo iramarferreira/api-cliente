@@ -66,7 +66,7 @@ public class ClienteRepositoryTest {
 
         // Verificar se cada atributo foi realmente salvo
         Assertions.assertThat(clienteAtualizado.getNome()).isEqualTo(clienteSalvo.getNome());
-        Assertions.assertThat(clienteAtualizado.getTelefone()).isEqualTo(cliente.getTelefone());
+        Assertions.assertThat(clienteAtualizado.getTelefone()).isEqualTo(clienteSalvo.getTelefone());
 
     }
 

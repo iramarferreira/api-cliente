@@ -24,6 +24,11 @@ public class EnderecoService {
         return enderecoRepository.save(endereco);
     }
 
+    // Atualizar no banco
+    public Endereco update(Endereco endereco){
+        return enderecoRepository.save(endereco);
+    }
+
 
     // Deletar um endereco
     public void delete(Long id){
