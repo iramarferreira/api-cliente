@@ -1,10 +1,8 @@
-package br.com.ifrndsc.CRUDCliente.service;
+package br.com.ifrndsc.CRUDCliente.controller;
 
 import br.com.ifrndsc.CRUDCliente.model.Cliente;
-import br.com.ifrndsc.CRUDCliente.model.Endereco;
-import br.com.ifrndsc.CRUDCliente.repository.ClienteRepository;
+import br.com.ifrndsc.CRUDCliente.service.ClienteService;
 import br.com.ifrndsc.CRUDCliente.util.ClienteCreator;
-import br.com.ifrndsc.CRUDCliente.util.EnderecoCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,19 +16,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
-public class ClienteServiceTest {
+public class ClienteControllerTest {
 
     @InjectMocks
+    ClienteController clienteController;
+
+    @Mock
     ClienteService clienteService;
-
-    @Mock
-    ClienteRepository clienteRepository;
-
-    @Mock
-    EnderecoService enderecoService;
 
     @BeforeEach
     void setup(){
@@ -38,28 +32,29 @@ public class ClienteServiceTest {
         List<Cliente> clienteList = new ArrayList<Cliente>();
         clienteList.add(ClienteCreator.clienteSalvoValido());
 
-        // Quando for executado o findAll do repository
-        BDDMockito.when(clienteRepository.findAll())
+        // Quando for executado o findAll do service
+        BDDMockito.when(clienteService.findAll())
                 .thenReturn(clienteList);
 
-        // Quando for executado o findByName do repository
-        BDDMockito.when(clienteRepository.findByName(ArgumentMatchers.any()))
+        // Quando for executado o findByName do service
+        BDDMockito.when(clienteService.findByName(ArgumentMatchers.any()))
                 .thenReturn(clienteList);
 
-//        // Quando for executado o findByEmail do repository
-//        BDDMockito.when(clienteRepository.findByEmail(ArgumentMatchers.any()))
-//                .thenReturn(ClienteCreator.clienteSalvoValido());
 
-        // Quando for executado o findById do repository
-        BDDMockito.when(clienteRepository.findById(ArgumentMatchers.anyLong()))
-                .thenReturn(java.util.Optional.ofNullable(ClienteCreator.clienteSalvoValido()));
-
-        // Quando for executado o save do repository
-        BDDMockito.when(clienteRepository.save(ArgumentMatchers.any()))
+        // Quando for executado o findById do service
+        BDDMockito.when(clienteService.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(ClienteCreator.clienteSalvoValido());
 
-        // Quando for executado o deleteById do repository
-        BDDMockito.doNothing().when(clienteRepository).deleteById(ArgumentMatchers.anyLong());
+        // Quando for executado o save do service
+        BDDMockito.when(clienteService.save(ArgumentMatchers.any()))
+                .thenReturn(ClienteCreator.clienteSalvoValido());
+
+        // Quando for executado o update do service
+        BDDMockito.when(clienteService.update(ArgumentMatchers.any()))
+                .thenReturn(ClienteCreator.clienteSalvoValido());
+
+        // Quando for executado o deleteById do service
+        BDDMockito.doNothing().when(clienteService).delete(ArgumentMatchers.anyLong());
 
     }
 
@@ -89,8 +84,8 @@ public class ClienteServiceTest {
     @Test
     @DisplayName(value = "Atualizar um cliente com sucesso")
     void atualizarCliente_quandoSucesso(){
-        Cliente clienteEsperado = ClienteCreator.clienteParaSalvar();
-        Cliente clienteAtualizado = clienteService.update(clienteEsperado);
+        Cliente clienteEsperado = ClienteCreator.clienteSalvoValido();
+        Cliente clienteAtualizado = clienteController.atualizar(clienteEsperado).getBody();
 
         Assertions.assertThat(clienteAtualizado).isNotNull();
 
@@ -104,7 +99,7 @@ public class ClienteServiceTest {
     @DisplayName(value = "Deletar um cliente com sucesso")
     void deletarCliente_quandoSucesso(){
 
-        Assertions.assertThatCode(() -> clienteService.delete(1L))
+        Assertions.assertThatCode(() -> clienteController.deletarCliente(1L))
                 .doesNotThrowAnyException();
 
 
@@ -115,7 +110,7 @@ public class ClienteServiceTest {
     void listarClientes_quandoSucesso(){
         Cliente clienteEsperado = ClienteCreator.clienteSalvoValido();
 
-        List<Cliente> clientes = clienteService.findAll();
+        List<Cliente> clientes = clienteController.listarClientes().getBody();
 
         Assertions.assertThat(clientes).isNotEmpty();
         Assertions.assertThat(clientes.size()).isEqualTo(1);
@@ -127,7 +122,7 @@ public class ClienteServiceTest {
     void listarClientePeloId_quandoSucesso(){
         Cliente clienteEsperado = ClienteCreator.clienteSalvoValido();
 
-        Cliente cliente = clienteService.findById(1L);
+        Cliente cliente = clienteController.findCliente(1L).getBody();
 
         Assertions.assertThat(cliente.getNome()).isEqualTo(clienteEsperado.getNome());
         Assertions.assertThat(cliente.getId()).isEqualTo(clienteEsperado.getId());
@@ -141,26 +136,13 @@ public class ClienteServiceTest {
     void listarClientesPeloNome_quandoSucesso(){
         Cliente clienteEsperado = ClienteCreator.clienteSalvoValido();
 
-        List<Cliente> clientes = clienteService.findByName(clienteEsperado.getNome());
+        List<Cliente> clientes = clienteController.findByName(clienteEsperado.getNome()).getBody();
 
         Assertions.assertThat(clientes).isNotEmpty();
         Assertions.assertThat(clientes.size()).isEqualTo(1);
 
         Assertions.assertThat(clientes.get(0).getNome()).isEqualTo(clienteEsperado.getNome());
     }
-//
-//    @Test
-//    @DisplayName(value = "Listar clientes com sucesso")
-//    void listarClientePeloEmail_quandoSucesso(){
-//        Cliente clienteEsperado = ClienteCreator.clienteSalvoValido();
-//
-//        Cliente cliente = clienteService.findByEmail(clienteEsperado.getEmail());
-//
-//        Assertions.assertThat(cliente.getNome()).isEqualTo(clienteEsperado.getNome());
-//        Assertions.assertThat(cliente.getId()).isEqualTo(clienteEsperado.getId());
-//        Assertions.assertThat(cliente.getTelefone()).isEqualTo(clienteEsperado.getTelefone());
-//        Assertions.assertThat(cliente.getEmail()).isEqualTo(clienteEsperado.getEmail());
-//
-//    }
+
 
 }
