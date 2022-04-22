@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ import java.util.List;
 
 @Controller
 @ResponseBody // Retorno json
-@CrossOrigin(originPatterns = "http://localhost:3000/", allowCredentials = "true") // Permitir requisições de qualquer origem
+@CrossOrigin(originPatterns = "${spring.application.originPatterns}", allowCredentials = "true") // Permitir requisições de qualquer origem
 @RequestMapping(path = "/api")
 @Tag(name = "Clientes", description = "Documentação da API REST de Clientes")
 public class ClienteController {
